@@ -1,9 +1,10 @@
 export default function DataTable({ columns, rows, emptyMessage = 'No records.' }) {
   if (!rows?.length) {
-    return <p className="py-8 text-body-sm text-ink-mute">{emptyMessage}</p>;
+    return <p className="py-8 text-body-sm text-text-secondary">{emptyMessage}</p>;
   }
+
   return (
-    <div className="overflow-x-auto">
+    <div className="overflow-x-auto rounded-xl border border-ui-border bg-ui-surface">
       <table className="data-table">
         <thead>
           <tr>

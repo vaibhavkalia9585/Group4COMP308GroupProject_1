@@ -1,38 +1,37 @@
 import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { MapPin, CheckCircle2 } from 'lucide-react';
 import { REPORT_ISSUE_MUTATION } from '../graphql/mutations';
 import PageTitle from '../components/PageTitle';
 
 const CATEGORIES = [
-  { value: '',           label: 'Let us classify it automatically (recommended)' },
-  { value: 'POTHOLE',    label: 'Pothole' },
-  { value: 'STREETLIGHT',label: 'Streetlight' },
-  { value: 'FLOODING',   label: 'Flooding' },
-  { value: 'SAFETY',     label: 'Safety hazard' },
-  { value: 'GARBAGE',    label: 'Garbage' },
-  { value: 'NOISE',      label: 'Noise' },
-  { value: 'GRAFFITI',   label: 'Graffiti' },
-  { value: 'OTHER',      label: 'Other' },
+  { value: '', label: 'Let us classify it automatically (recommended)' },
+  { value: 'POTHOLE', label: 'Pothole' },
+  { value: 'STREETLIGHT', label: 'Streetlight' },
+  { value: 'FLOODING', label: 'Flooding' },
+  { value: 'SAFETY', label: 'Safety hazard' },
+  { value: 'GARBAGE', label: 'Garbage' },
+  { value: 'NOISE', label: 'Noise' },
+  { value: 'GRAFFITI', label: 'Graffiti' },
+  { value: 'OTHER', label: 'Other' },
 ];
 
 function StepHeader({ n, title, subtitle }) {
   return (
     <div className="mb-5 flex items-center gap-3">
-      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-ink text-white text-body-sm font-semibold">
+      <span className="flex h-7 w-7 items-center justify-center rounded-full bg-brand-primary text-body-sm font-semibold text-white">
         {n}
       </span>
       <div>
-        <h2 className="font-semibold text-ink text-body-lg leading-tight">{title}</h2>
-        {subtitle && <p className="text-body-sm text-ink-mute">{subtitle}</p>}
+        <h2 className="text-body-lg font-semibold leading-tight text-text-primary">{title}</h2>
+        {subtitle && <p className="text-body-sm text-text-secondary">{subtitle}</p>}
       </div>
     </div>
   );
 }
 
 export default function ReportIssue() {
-  const navigate = useNavigate();
   const [form, setForm] = useState({
     title: '', description: '', category: '',
     address: '', lat: '', lng: '', imageUrl: '',
@@ -83,28 +82,28 @@ export default function ReportIssue() {
     return (
       <div className="mx-auto max-w-xl">
         <div className="panel p-8">
-          <div className="flex items-center gap-3 mb-2">
-            <CheckCircle2 size={24} strokeWidth={2} className="text-moss" />
-            <p className="text-label uppercase tracking-widest font-semibold text-moss">
+          <div className="mb-2 flex items-center gap-3">
+            <CheckCircle2 size={24} strokeWidth={2} className="text-brand-primary" />
+            <p className="text-label font-semibold uppercase tracking-widest text-brand-primary">
               Report submitted
             </p>
           </div>
-          <h1 className="font-semibold text-ink text-display-lg">
+          <h1 className="text-display-lg font-semibold text-text-primary">
             Your report has been received.
           </h1>
-          <div className="mt-6 rounded-lg bg-paper-dim p-4">
-            <p className="text-body-sm text-ink-mute">Reference</p>
-            <p className="font-mono text-civic font-semibold mt-0.5" style={{ fontSize: '15px' }}>
+          <div className="mt-6 rounded-lg bg-blue-50 p-4">
+            <p className="text-body-sm text-text-secondary">Reference</p>
+            <p className="mt-0.5 font-mono text-[15px] font-semibold text-brand-primary">
               CASE-{result.id?.slice(-8).toUpperCase()}
             </p>
           </div>
-          <p className="text-body text-ink-soft mt-5">
-            Filed as <strong>{result.category}</strong> with{' '}
-            <strong>{result.priority.toLowerCase()}</strong> priority. City staff will
-            review it and update the status. You'll be notified of any changes.
+          <p className="mt-5 text-body text-text-secondary">
+            Filed as <strong className="text-text-primary">{result.category}</strong> with{' '}
+            <strong className="text-text-primary">{result.priority.toLowerCase()}</strong> priority.
+            City staff will review it and update the status. You&apos;ll be notified of any changes.
           </p>
           {result.aiSuggestedCategory && (
-            <p className="mt-3 text-body-sm text-ink-mute">
+            <p className="mt-3 text-body-sm text-text-secondary">
               <span className="font-mono text-mono">AI classification:</span>{' '}
               {result.aiSuggestedCategory} / {result.aiSuggestedPriority}
             </p>
@@ -123,17 +122,16 @@ export default function ReportIssue() {
   return (
     <div className="mx-auto max-w-2xl">
       <PageTitle label="Municipal Services" title="Report a problem">
-        Tell us what's wrong. This report is shared with city staff and published to a
+        Tell us what&apos;s wrong. This report is shared with city staff and published to a
         public record.
       </PageTitle>
 
       <form onSubmit={onSubmit}>
-        {/* Step 1 */}
-        <div className="panel p-6 mb-5">
+        <div className="panel mb-5 p-6">
           <StepHeader n="1" title="What happened" subtitle="Describe the issue in a few sentences." />
           <div className="flex flex-col gap-4">
             <label className="flex flex-col gap-1.5">
-              <span className="text-body-sm font-medium text-ink">Title</span>
+              <span className="text-body-sm font-medium text-text-primary">Title</span>
               <input
                 name="title"
                 required
@@ -144,7 +142,7 @@ export default function ReportIssue() {
               />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className="text-body-sm font-medium text-ink">Description</span>
+              <span className="text-body-sm font-medium text-text-primary">Description</span>
               <textarea
                 name="description"
                 required
@@ -156,13 +154,8 @@ export default function ReportIssue() {
               />
             </label>
             <label className="flex flex-col gap-1.5">
-              <span className="text-body-sm font-medium text-ink">Category</span>
-              <select
-                name="category"
-                value={form.category}
-                onChange={onChange}
-                className="field-input"
-              >
+              <span className="text-body-sm font-medium text-text-primary">Category</span>
+              <select name="category" value={form.category} onChange={onChange} className="field-input">
                 {CATEGORIES.map((c) => (
                   <option key={c.value} value={c.value}>{c.label}</option>
                 ))}
@@ -171,12 +164,11 @@ export default function ReportIssue() {
           </div>
         </div>
 
-        {/* Step 2 */}
-        <div className="panel p-6 mb-5">
+        <div className="panel mb-5 p-6">
           <StepHeader n="2" title="Where it is" subtitle="A precise location helps staff triage faster." />
           <div className="flex flex-col gap-4">
             <label className="flex flex-col gap-1.5">
-              <span className="text-body-sm font-medium text-ink">Address</span>
+              <span className="text-body-sm font-medium text-text-primary">Address</span>
               <input
                 name="address"
                 value={form.address}
@@ -185,9 +177,9 @@ export default function ReportIssue() {
                 placeholder="123 King St W, Toronto, ON"
               />
             </label>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <label className="flex flex-col gap-1.5">
-                <span className="text-body-sm font-medium text-ink">Latitude</span>
+                <span className="text-body-sm font-medium text-text-primary">Latitude</span>
                 <input
                   name="lat"
                   value={form.lat}
@@ -197,7 +189,7 @@ export default function ReportIssue() {
                 />
               </label>
               <label className="flex flex-col gap-1.5">
-                <span className="text-body-sm font-medium text-ink">Longitude</span>
+                <span className="text-body-sm font-medium text-text-primary">Longitude</span>
                 <input
                   name="lng"
                   value={form.lng}
@@ -214,28 +206,27 @@ export default function ReportIssue() {
           </div>
         </div>
 
-        {/* Step 3 */}
-        <div className="panel p-6 mb-5">
-          <StepHeader n="3" title="Anything else" subtitle="Optional — a photo makes reports easier to triage." />
+        <div className="panel mb-5 p-6">
+          <StepHeader n="3" title="Anything else" subtitle="Optional: a photo makes reports easier to triage." />
           <label className="flex flex-col gap-1.5">
-            <span className="text-body-sm font-medium text-ink">Image URL (optional)</span>
+            <span className="text-body-sm font-medium text-text-primary">Image URL (optional)</span>
             <input
               name="imageUrl"
               value={form.imageUrl}
               onChange={onChange}
               className="field-input"
-              placeholder="https://…"
+              placeholder="https://example.com/photo.jpg"
             />
           </label>
         </div>
 
-        {error && <p className="mb-4 text-body-sm text-flag">{error}</p>}
+        {error && <p className="mb-4 text-body-sm text-brand-accent">{error}</p>}
 
         <div className="flex flex-col items-center gap-3">
-          <button type="submit" className="btn-ink w-full sm:w-auto" disabled={loading} style={{ padding: '0.75rem 1.75rem' }}>
+          <button type="submit" className="btn-ink w-full px-7 py-3 sm:w-auto" disabled={loading}>
             {loading ? 'Submitting…' : 'Submit report'}
           </button>
-          <p className="text-body-sm text-ink-mute text-center">
+          <p className="text-center text-body-sm text-text-secondary">
             Your name and email will be attached to this report.
           </p>
         </div>

@@ -28,12 +28,12 @@ export default function Login() {
   return (
     <div className="mx-auto w-full max-w-md py-8">
       <div className="panel p-8">
-        <h1 className="font-semibold text-ink text-display-lg">Sign in</h1>
-        <p className="mt-1 text-body text-ink-mute">Welcome back to CivicCase.</p>
+        <h1 className="text-display-lg font-semibold text-text-primary">Sign in</h1>
+        <p className="mt-1 text-body text-text-secondary">Welcome back to CivicCase.</p>
 
         <form onSubmit={onSubmit} className="mt-6 flex flex-col gap-4">
           <label className="flex flex-col gap-1.5">
-            <span className="text-body-sm font-medium text-ink">Email</span>
+            <span className="text-body-sm font-medium text-text-primary">Email</span>
             <input
               name="email"
               type="email"
@@ -46,7 +46,7 @@ export default function Login() {
             />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-body-sm font-medium text-ink">Password</span>
+            <span className="text-body-sm font-medium text-text-primary">Password</span>
             <input
               name="password"
               type="password"
@@ -59,17 +59,16 @@ export default function Login() {
             />
           </label>
 
-          {error && <p className="text-body-sm text-flag">{error}</p>}
+          {error && <p className="text-body-sm text-brand-accent">{error}</p>}
 
-          <button type="submit" className="btn-ink w-full mt-2" disabled={loading}>
+          <button type="submit" className="btn-ink mt-2 w-full" disabled={loading}>
             {loading ? 'Signing in…' : 'Sign in'}
           </button>
         </form>
 
-        <hr className="hr-thin mt-6 mb-4" />
-        <p className="text-body-sm text-ink-mute text-center">
-          Don't have an account?{' '}
-          <Link to="/register" className="link">Create one.</Link>
+        <hr className="hr-thin mb-4 mt-6" />
+        <p className="text-center text-body-sm text-text-secondary">
+          Don't have an account? <Link to="/register" className="link">Create one.</Link>
         </p>
       </div>
     </div>

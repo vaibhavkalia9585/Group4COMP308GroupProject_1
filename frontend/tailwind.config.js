@@ -4,13 +4,49 @@ export default {
   theme: {
     extend: {
       colors: {
-        paper:  { DEFAULT: '#F7F7F5', dim: '#F0EDE6' },
-        ink:    { DEFAULT: '#0B1220', soft: '#1F2937', mute: '#4B5563', faint: '#9CA3AF' },
-        rule:   { DEFAULT: '#E6E4DF', soft: '#F0EDE6' },
-        civic:  { DEFAULT: '#1A3A5C', ink: '#0E2238' },
-        flag:   { DEFAULT: '#A3352D', soft: '#F3E4E1' },
-        moss:   { DEFAULT: '#2F5D43', soft: '#E2ECE3' },
-        sun:    { DEFAULT: '#B8860B', soft: '#F3EAD2' },
+        brand: {
+          primary: '#1E3A8A',
+          accent: '#DC2626',
+        },
+        ui: {
+          bg: '#F3F4F6',
+          surface: '#FFFFFF',
+          border: '#E5E7EB',
+        },
+        text: {
+          primary: '#111827',
+          secondary: '#6B7280',
+        },
+        paper: {
+          DEFAULT: '#F3F4F6',
+          dim: '#F9FAFB',
+        },
+        ink: {
+          DEFAULT: '#111827',
+          soft: '#1F2937',
+          mute: '#6B7280',
+          faint: '#9CA3AF',
+        },
+        rule: {
+          DEFAULT: '#E5E7EB',
+          soft: '#F9FAFB',
+        },
+        civic: {
+          DEFAULT: '#1E3A8A',
+          ink: '#1E40AF',
+        },
+        flag: {
+          DEFAULT: '#DC2626',
+          soft: '#FEF2F2',
+        },
+        moss: {
+          DEFAULT: '#6B7280',
+          soft: '#F3F4F6',
+        },
+        sun: {
+          DEFAULT: '#3B82F6',
+          soft: '#EFF6FF',
+        },
       },
       fontFamily: {
         // `serif` aliased to Inter so existing `font-serif` classes keep working

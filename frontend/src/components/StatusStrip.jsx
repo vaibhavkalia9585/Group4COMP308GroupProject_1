@@ -7,29 +7,25 @@ export default function StatusStrip() {
   });
   const s = data?.dashboardSummary;
 
+  if (!s) return null;
+
   return (
-    <div className="border-b border-rule bg-paper-dim">
+    <div className="border-b border-ui-border bg-blue-50">
       <div className="mx-auto flex max-w-content items-center gap-4 px-6 py-1.5 text-body-sm">
-        {s ? (
-          <>
-            <span className="text-ink-mute">
-              <span className="font-semibold text-ink">{s.open}</span> open
-            </span>
-            <span className="text-rule">·</span>
-            <span className="text-ink-mute">
-              <span className="font-semibold text-ink">{s.resolved}</span> resolved
-            </span>
-            <span className="text-rule">·</span>
-            {s.urgent > 0 ? (
-              <span className="text-flag font-semibold">
-                {s.urgent} urgent alert{s.urgent !== 1 ? 's' : ''}
-              </span>
-            ) : (
-              <span className="text-ink-mute">no urgent alerts</span>
-            )}
-          </>
+        <span className="text-text-secondary">
+          <span className="font-semibold text-brand-primary">{s.open}</span> open
+        </span>
+        <span className="text-ui-border">·</span>
+        <span className="text-text-secondary">
+          <span className="font-semibold text-brand-primary">{s.resolved}</span> resolved
+        </span>
+        <span className="text-ui-border">·</span>
+        {s.urgent > 0 ? (
+          <span className="font-semibold text-brand-accent">
+            {s.urgent} urgent alert{s.urgent !== 1 ? 's' : ''}
+          </span>
         ) : (
-          <span className="text-ink-mute">Loading status…</span>
+          <span className="text-text-secondary">no urgent alerts</span>
         )}
       </div>
     </div>
