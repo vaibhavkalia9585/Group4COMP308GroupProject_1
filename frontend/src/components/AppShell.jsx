@@ -23,7 +23,7 @@ export default function AppShell({ children }) {
 
   return (
     <div className="flex min-h-screen flex-col bg-ui-bg text-text-primary">
-      <header className="border-b border-ui-border bg-brand-primary">
+      <header className="border-b border-ui-border bg-brand-primary" style={{ boxShadow: '0 4px 24px rgba(15,23,42,0.18)' }}>
         <div className="mx-auto flex max-w-content items-center justify-between px-4 py-3 sm:px-6">
           {/* Logo */}
           <Link to="/" className="shrink-0 flex items-center gap-2.5" onClick={close}>

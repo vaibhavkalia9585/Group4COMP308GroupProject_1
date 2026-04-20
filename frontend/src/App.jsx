@@ -1,7 +1,9 @@
 import { lazy, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
+import { AnimatePresence } from 'framer-motion';
 import AppShell from './components/AppShell';
 import ProtectedRoute from './components/ProtectedRoute';
+import PageTransition from './components/PageTransition';
 import Home from './pages/Home';
 
 // ── Auth micro-frontend ──────────────────────────────────────────────────────
@@ -27,28 +29,36 @@ function Loading() {
   );
 }
 
+function P({ children }) {
+  return <PageTransition>{children}</PageTransition>;
+}
+
 export default function App() {
+  const location = useLocation();
+
   return (
     <AppShell>
       <Suspense fallback={<Loading />}>
-        <Routes>
-          <Route path="/" element={<Home />} />
+        <AnimatePresence mode="wait" initial={false}>
+          <Routes location={location} key={location.pathname}>
+            <Route path="/" element={<P><Home /></P>} />
 
-          {/* Auth micro-frontend */}
-          <Route path="/login"    element={<Login />} />
-          <Route path="/register" element={<Register />} />
+            {/* Auth micro-frontend */}
+            <Route path="/login"    element={<P><Login /></P>} />
+            <Route path="/register" element={<P><Register /></P>} />
 
-          {/* Issue micro-frontend */}
-          <Route path="/issues"     element={<ProtectedRoute><IssuesList /></ProtectedRoute>} />
-          <Route path="/issues/:id" element={<ProtectedRoute><IssueDetail /></ProtectedRoute>} />
-          <Route path="/report"     element={<ProtectedRoute><ReportIssue /></ProtectedRoute>} />
-          <Route path="/my-issues"  element={<ProtectedRoute><MyIssues /></ProtectedRoute>} />
+            {/* Issue micro-frontend */}
+            <Route path="/issues"     element={<P><ProtectedRoute><IssuesList /></ProtectedRoute></P>} />
+            <Route path="/issues/:id" element={<P><ProtectedRoute><IssueDetail /></ProtectedRoute></P>} />
+            <Route path="/report"     element={<P><ProtectedRoute><ReportIssue /></ProtectedRoute></P>} />
+            <Route path="/my-issues"  element={<P><ProtectedRoute><MyIssues /></ProtectedRoute></P>} />
 
-          {/* Analytics micro-frontend */}
-          <Route path="/staff"    element={<ProtectedRoute roles={['STAFF']}><StaffDashboard /></ProtectedRoute>} />
-          <Route path="/advocate" element={<ProtectedRoute roles={['ADVOCATE']}><AdvocateDashboard /></ProtectedRoute>} />
-          <Route path="/chatbot"  element={<ProtectedRoute><Chatbot /></ProtectedRoute>} />
-        </Routes>
+            {/* Analytics micro-frontend */}
+            <Route path="/staff"    element={<P><ProtectedRoute roles={['STAFF']}><StaffDashboard /></ProtectedRoute></P>} />
+            <Route path="/advocate" element={<P><ProtectedRoute roles={['ADVOCATE']}><AdvocateDashboard /></ProtectedRoute></P>} />
+            <Route path="/chatbot"  element={<P><ProtectedRoute><Chatbot /></ProtectedRoute></P>} />
+          </Routes>
+        </AnimatePresence>
       </Suspense>
     </AppShell>
   );

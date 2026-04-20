@@ -1,13 +1,19 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
-import { ThumbsUp, ExternalLink } from 'lucide-react';
+import { ThumbsUp } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { ISSUES_QUERY } from '../graphql/queries';
 import PageTitle from '../components/PageTitle';
 import StatusDot from '../components/StatusDot';
 
 const CATEGORIES = ['', 'POTHOLE', 'STREETLIGHT', 'FLOODING', 'SAFETY', 'GARBAGE', 'NOISE', 'GRAFFITI', 'OTHER'];
 const STATUSES   = ['', 'OPEN', 'IN_PROGRESS', 'RESOLVED'];
+
+const cardVariants = {
+  hidden:  { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.25, ease: 'easeOut' } },
+};
 
 function fmt(iso) {
   return new Date(iso).toLocaleDateString('en-CA', { year: 'numeric', month: 'short', day: 'numeric' });
@@ -34,26 +40,18 @@ export default function IssuesList() {
         Browse every reported issue. Click an issue to view details, leave a comment, or upvote it.
       </PageTitle>
 
-      {/* Filters — pills on desktop, selects on mobile */}
+      {/* Filters */}
       <div className="panel p-4 mb-6">
         {/* Mobile: dropdowns */}
         <div className="flex gap-3 sm:hidden">
-          <select
-            value={statusFilter}
-            onChange={(e) => setStatusFilter(e.target.value)}
-            className="field-input flex-1"
-          >
+          <select value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)} className="field-input flex-1">
             {STATUSES.map((s) => (
               <option key={s} value={s}>
                 {s === '' ? 'All statuses' : s === 'IN_PROGRESS' ? 'In progress' : s.charAt(0) + s.slice(1).toLowerCase()}
               </option>
             ))}
           </select>
-          <select
-            value={categoryFilter}
-            onChange={(e) => setCategoryFilter(e.target.value)}
-            className="field-input flex-1"
-          >
+          <select value={categoryFilter} onChange={(e) => setCategoryFilter(e.target.value)} className="field-input flex-1">
             {CATEGORIES.map((c) => (
               <option key={c} value={c}>
                 {c === '' ? 'All categories' : c.charAt(0) + c.slice(1).toLowerCase()}
@@ -87,7 +85,6 @@ export default function IssuesList() {
         </div>
       </div>
 
-      {/* Issue cards */}
       {loading && <p className="text-body-sm text-ink-mute">Loading…</p>}
 
       {!loading && issues.length === 0 && (
@@ -96,53 +93,54 @@ export default function IssuesList() {
         </div>
       )}
 
-      <div className="flex flex-col gap-3">
+      <motion.div
+        className="flex flex-col gap-3"
+        initial="hidden"
+        animate="visible"
+        variants={{ visible: { transition: { staggerChildren: 0.06 } } }}
+      >
         {issues.map((issue) => (
-          <Link
-            key={issue.id}
-            to={`/issues/${issue.id}`}
-            className="panel p-4 flex items-start gap-4 hover:border-civic/40 transition-colors group"
-          >
-            {/* Priority dot */}
-            <div className="pt-0.5 shrink-0">
-              <StatusDot type="priority" value={issue.priority} />
-            </div>
-
-            {/* Content */}
-            <div className="flex-1 min-w-0">
-              <p className="font-semibold text-ink text-body group-hover:text-civic transition-colors truncate">
-                {issue.title}
-              </p>
-              <p className="text-body-sm text-ink-mute mt-0.5 truncate">
-                {issue.description}
-              </p>
-              <div className="flex flex-wrap items-center gap-3 mt-2 text-mono text-ink-faint">
-                <span>{issue.category}</span>
-                <span>·</span>
-                <span>{fmt(issue.createdAt)}</span>
-                {issue.location?.address && (
-                  <>
-                    <span>·</span>
-                    <span className="truncate max-w-[160px]">📍 {issue.location.address}</span>
-                  </>
-                )}
+          <motion.div key={issue.id} variants={cardVariants}>
+            <Link
+              to={`/issues/${issue.id}`}
+              className="panel p-4 flex items-start gap-4 hover:border-brand-primary/30 transition-all duration-200 group block hover:-translate-y-0.5 hover:shadow-md"
+            >
+              <div className="pt-0.5 shrink-0">
+                <StatusDot type="priority" value={issue.priority} />
               </div>
-            </div>
-
-            {/* Right side: status + upvotes + arrow */}
-            <div className="shrink-0 flex flex-col items-end gap-2">
-              <StatusDot type="status" value={issue.status} />
-              <span className="inline-flex items-center gap-1 text-body-sm text-ink-mute">
-                <ThumbsUp size={12} strokeWidth={2} />
-                {issue.upvoteCount ?? 0}
-              </span>
-            </div>
-          </Link>
+              <div className="flex-1 min-w-0">
+                <p className="font-semibold text-ink text-body group-hover:text-civic transition-colors truncate">
+                  {issue.title}
+                </p>
+                <p className="text-body-sm text-ink-mute mt-0.5 truncate">{issue.description}</p>
+                <div className="flex flex-wrap items-center gap-3 mt-2 text-mono text-ink-faint">
+                  <span>{issue.category}</span>
+                  <span>·</span>
+                  <span>{fmt(issue.createdAt)}</span>
+                  {issue.location?.address && (
+                    <>
+                      <span>·</span>
+                      <span className="truncate max-w-[160px]">📍 {issue.location.address}</span>
+                    </>
+                  )}
+                </div>
+              </div>
+              <div className="shrink-0 flex flex-col items-end gap-2">
+                <StatusDot type="status" value={issue.status} />
+                <span className="inline-flex items-center gap-1 text-body-sm text-ink-mute">
+                  <ThumbsUp size={12} strokeWidth={2} />
+                  {issue.upvoteCount ?? 0}
+                </span>
+              </div>
+            </Link>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
 
       {issues.length > 0 && (
-        <p className="mt-4 text-center text-body-sm text-ink-faint">{issues.length} issue{issues.length !== 1 ? 's' : ''} shown</p>
+        <p className="mt-4 text-center text-body-sm text-ink-faint">
+          {issues.length} issue{issues.length !== 1 ? 's' : ''} shown
+        </p>
       )}
     </div>
   );

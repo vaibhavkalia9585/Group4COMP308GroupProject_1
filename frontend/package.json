@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
+    "framer-motion": "^12.38.0",
     "graphql": "^16.9.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^1.8.0",

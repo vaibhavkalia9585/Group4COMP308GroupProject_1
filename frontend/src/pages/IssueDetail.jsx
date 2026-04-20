@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useQuery, useMutation } from '@apollo/client';
 import { ArrowLeft, ThumbsUp, Send } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { ISSUE_DETAIL_QUERY } from '../graphql/queries';
 import { ADD_COMMENT_MUTATION, UPVOTE_ISSUE_MUTATION } from '../graphql/mutations';
 import StatusDot from '../components/StatusDot';
@@ -75,20 +76,38 @@ export default function IssueDetail() {
 
       {/* Upvote */}
       <div className="panel p-5 mb-5 flex items-center gap-4">
-        <button
+        <motion.button
           onClick={() => upvoteIssue({ variables: { id } })}
+          whileTap={{ scale: 0.88 }}
+          whileHover={{ scale: 1.05 }}
+          transition={{ type: 'spring', stiffness: 400, damping: 15 }}
           className={`inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-body-sm font-medium transition-colors ${
             issue.upvotedByMe
               ? 'border-civic bg-civic text-white'
               : 'border-rule bg-paper text-ink hover:border-civic hover:text-civic'
           }`}
         >
-          <ThumbsUp size={15} strokeWidth={2} />
+          <motion.span
+            animate={issue.upvotedByMe ? { rotate: [0, -20, 10, 0] } : { rotate: 0 }}
+            transition={{ duration: 0.4 }}
+            style={{ display: 'inline-flex' }}
+          >
+            <ThumbsUp size={15} strokeWidth={2} />
+          </motion.span>
           {issue.upvotedByMe ? 'Upvoted' : 'Upvote'}
-        </button>
-        <span className="text-body-sm text-ink-mute">
-          {issue.upvoteCount} {issue.upvoteCount === 1 ? 'upvote' : 'upvotes'}
-        </span>
+        </motion.button>
+        <AnimatePresence mode="wait">
+          <motion.span
+            key={issue.upvoteCount}
+            initial={{ opacity: 0, y: -8 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 8 }}
+            transition={{ duration: 0.2 }}
+            className="text-body-sm text-ink-mute"
+          >
+            {issue.upvoteCount} {issue.upvoteCount === 1 ? 'upvote' : 'upvotes'}
+          </motion.span>
+        </AnimatePresence>
       </div>
 
       {/* Comments */}

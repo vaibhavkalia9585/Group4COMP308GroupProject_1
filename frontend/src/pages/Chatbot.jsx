@@ -1,6 +1,7 @@
 import { useRef, useState, useEffect } from 'react';
 import { useMutation } from '@apollo/client';
 import { ArrowRight, Sparkles } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { CHAT_MUTATION } from '../graphql/mutations';
 
 const STARTERS = [
@@ -57,6 +58,11 @@ export default function Chatbot() {
   };
 
   const hasUserMessages = messages.some((m) => m.role === 'user');
+
+  const msgVariants = {
+    hidden:  { opacity: 0, y: 10 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.2, ease: 'easeOut' } },
+  };
 
   return (
     <div className="mx-auto max-w-2xl">
@@ -115,45 +121,47 @@ export default function Chatbot() {
           )}
 
           <div className="flex flex-col gap-3">
+            <AnimatePresence initial={false}>
             {messages.map((m, idx) => {
               if (m.role === 'user') {
                 return (
-                  <div key={idx} className="flex justify-end">
+                  <motion.div key={idx} variants={msgVariants} initial="hidden" animate="visible" className="flex justify-end">
                     <div className="max-w-[85%] rounded-xl rounded-br-sm bg-brand-primary px-4 py-2.5 text-body text-white break-words">
                       {m.content}
                     </div>
-                  </div>
+                  </motion.div>
                 );
               }
               if (m.source === 'system') {
                 return (
-                  <div key={idx} className="rounded-xl bg-gray-50 p-4">
+                  <motion.div key={idx} variants={msgVariants} initial="hidden" animate="visible" className="rounded-xl bg-gray-50 p-4">
                     <p className="text-body text-text-secondary">{m.content}</p>
-                  </div>
+                  </motion.div>
                 );
               }
               if (m.source === 'error') {
                 return (
-                  <div key={idx} className="rounded-xl border border-brand-accent/20 bg-red-50 p-4">
+                  <motion.div key={idx} variants={msgVariants} initial="hidden" animate="visible" className="rounded-xl border border-brand-accent/20 bg-red-50 p-4">
                     <p className="text-body text-brand-accent">{m.content}</p>
-                  </div>
+                  </motion.div>
                 );
               }
               return (
-                <div key={idx} className="rounded-xl border border-ui-border bg-white p-4">
+                <motion.div key={idx} variants={msgVariants} initial="hidden" animate="visible" className="rounded-xl border border-ui-border bg-white p-4">
                   <p className="whitespace-pre-wrap break-words text-body text-text-primary">{m.content}</p>
                   {fmtSource(m.source, m.ms) && (
                     <p className="mt-2 font-mono text-mono text-gray-400">
                       {fmtSource(m.source, m.ms)}
                     </p>
                   )}
-                </div>
+                </motion.div>
               );
             })}
+            </AnimatePresence>
             {loading && (
-              <div className="rounded-xl border border-ui-border bg-white p-4">
+              <motion.div variants={msgVariants} initial="hidden" animate="visible" className="rounded-xl border border-ui-border bg-white p-4">
                 <p className="text-body text-text-secondary">Thinking…</p>
-              </div>
+              </motion.div>
             )}
             <div ref={bottomRef} />
           </div>
