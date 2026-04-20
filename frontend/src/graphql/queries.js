@@ -35,6 +35,8 @@ export const ISSUES_QUERY = gql`
         id
         name
       }
+      upvoteCount
+      upvotedByMe
       aiSuggestedCategory
       aiSuggestedPriority
       createdAt
@@ -59,6 +61,35 @@ export const DASHBOARD_SUMMARY_QUERY = gql`
         count
       }
       aiTrendInsights
+    }
+  }
+`;
+
+export const ISSUE_DETAIL_QUERY = gql`
+  query Issue($id: ID!) {
+    issue(id: $id) {
+      id
+      title
+      description
+      category
+      status
+      priority
+      imageUrl
+      location { address lat lng }
+      upvoteCount
+      upvotedByMe
+      reportedBy { id name role }
+      assignedTo { id name }
+      aiSuggestedCategory
+      aiSuggestedPriority
+      aiSummary
+      createdAt
+      comments {
+        id
+        body
+        createdAt
+        author { id name }
+      }
     }
   }
 `;

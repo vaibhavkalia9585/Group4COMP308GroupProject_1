@@ -6,7 +6,7 @@ const { requireAuth, requireRole } = require('../../utils/auth');
 const { toUser } = require('../auth-service/resolvers');
 const { classifyIssue } = require('../ai-service/gemini');
 
-const toIssue = (i) => ({
+const toIssue = (i, callerId = null) => ({
   id: i._id.toString(),
   title: i.title,
   description: i.description,
@@ -15,11 +15,13 @@ const toIssue = (i) => ({
   imageUrl: i.imageUrl || '',
   status: i.status,
   priority: i.priority,
-  reportedBy: i.reportedBy, // resolved by field resolver
-  assignedTo: i.assignedTo, // resolved by field resolver
+  reportedBy: i.reportedBy,
+  assignedTo: i.assignedTo,
   aiSummary: i.aiSummary || '',
   aiSuggestedCategory: i.aiSuggestedCategory || '',
   aiSuggestedPriority: i.aiSuggestedPriority || '',
+  upvoteCount: (i.upvotes || []).length,
+  upvotedByMe: callerId ? (i.upvotes || []).some((uid) => uid.toString() === callerId) : false,
   createdAt: i.createdAt.toISOString(),
   updatedAt: i.updatedAt.toISOString(),
   _id: i._id,
@@ -44,19 +46,19 @@ const toNotification = (n) => ({
 const resolvers = {
   Query: {
     issues: async (_, { filter = {} }, ctx) => {
-      requireAuth(ctx);
+      const user = requireAuth(ctx);
       const q = {};
       if (filter.status) q.status = filter.status;
       if (filter.category) q.category = filter.category;
       if (filter.priority) q.priority = filter.priority;
-      if (filter.mineOnly) q.reportedBy = ctx.user.sub;
+      if (filter.mineOnly) q.reportedBy = user.sub;
       const list = await Issue.find(q).sort({ createdAt: -1 });
-      return list.map(toIssue);
+      return list.map((i) => toIssue(i, user.sub));
     },
     issue: async (_, { id }, ctx) => {
-      requireAuth(ctx);
+      const user = requireAuth(ctx);
       const i = await Issue.findById(id);
-      return i ? toIssue(i) : null;
+      return i ? toIssue(i, user.sub) : null;
     },
     myNotifications: async (_, __, ctx) => {
       const user = requireAuth(ctx);
@@ -151,6 +153,20 @@ const resolvers = {
       const user = requireAuth(ctx);
       const c = await Comment.create({ issue: issueId, author: user.sub, body });
       return toComment(c);
+    },
+
+    upvoteIssue: async (_, { id }, ctx) => {
+      const user = requireAuth(ctx);
+      const issue = await Issue.findById(id);
+      if (!issue) throw new Error('Issue not found');
+      const alreadyUpvoted = (issue.upvotes || []).some((uid) => uid.toString() === user.sub);
+      if (alreadyUpvoted) {
+        issue.upvotes = issue.upvotes.filter((uid) => uid.toString() !== user.sub);
+      } else {
+        issue.upvotes.push(user.sub);
+      }
+      await issue.save();
+      return toIssue(issue, user.sub);
     },
 
     markNotificationRead: async (_, { id }, ctx) => {

@@ -52,6 +52,8 @@ const typeDefs = gql`
     aiSuggestedCategory: String
     aiSuggestedPriority: String
     comments: [Comment!]!
+    upvoteCount: Int!
+    upvotedByMe: Boolean!
     createdAt: String!
     updatedAt: String!
   }
@@ -99,6 +101,7 @@ const typeDefs = gql`
     assignIssue(id: ID!, userId: ID!): Issue!
     updateIssuePriority(id: ID!, priority: IssuePriority!): Issue!
     addComment(issueId: ID!, body: String!): Comment!
+    upvoteIssue(id: ID!): Issue!
     markNotificationRead(id: ID!): Notification!
   }
 `;

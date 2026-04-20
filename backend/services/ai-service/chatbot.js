@@ -72,7 +72,7 @@ function getModel(systemInstruction) {
   if (!key) throw new Error('GEMINI_API_KEY is not configured');
   const client = new GoogleGenerativeAI(key);
   return client.getGenerativeModel({
-    model: process.env.GEMINI_MODEL || 'gemini-1.5-flash',
+    model: process.env.GEMINI_MODEL || 'gemini-2.5-flash',
     systemInstruction,
   });
 }

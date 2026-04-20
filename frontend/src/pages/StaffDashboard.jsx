@@ -1,11 +1,14 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { useMutation, useQuery } from '@apollo/client';
+import { ThumbsUp, ExternalLink } from 'lucide-react';
 import { DASHBOARD_SUMMARY_QUERY, ISSUES_QUERY } from '../graphql/queries';
 import { UPDATE_ISSUE_PRIORITY_MUTATION, UPDATE_ISSUE_STATUS_MUTATION } from '../graphql/mutations';
 import PageTitle from '../components/PageTitle';
 import SparkStat from '../components/SparkStat';
 import StatusDot from '../components/StatusDot';
 import InlineEdit from '../components/InlineEdit';
+import IssueMap from '../components/IssueMap';
 
 const STATUSES = ['OPEN', 'IN_PROGRESS', 'RESOLVED'];
 const PRIORITIES = ['LOW', 'MEDIUM', 'HIGH', 'URGENT'];
@@ -56,6 +59,12 @@ export default function StaffDashboard() {
   return (
     <div>
       <PageTitle label="Municipal staff" title="Dashboard" />
+
+      {/* Issue heatmap */}
+      <div className="mb-8">
+        <p className="text-label uppercase tracking-widest font-medium text-ink-mute mb-3">Issue map</p>
+        <IssueMap issues={issuesData?.issues ?? []} />
+      </div>
 
       <div className="mb-10 grid grid-cols-2 gap-6 sm:grid-cols-3 lg:grid-cols-5">
         <SparkStat title="Total" value={s?.total} data={makeSpark(s?.total, 1.1)} loading={sumLoading} />
@@ -127,6 +136,8 @@ export default function StaffDashboard() {
                   <th style={{ width: '9rem' }}>Status</th>
                   <th style={{ width: '9rem' }}>Reporter</th>
                   <th style={{ width: '9rem' }}>Submitted</th>
+                  <th style={{ width: '6rem' }}>Upvotes</th>
+                  <th style={{ width: '5rem' }}></th>
                 </tr>
               </thead>
               <tbody>
@@ -153,6 +164,20 @@ export default function StaffDashboard() {
                     </td>
                     <td className="text-text-secondary">{issue.reportedBy?.name ?? '—'}</td>
                     <td className="font-mono text-mono text-text-secondary">{fmtDate(issue.createdAt)}</td>
+                    <td>
+                      <span className="inline-flex items-center gap-1 text-body-sm text-ink-mute">
+                        <ThumbsUp size={12} strokeWidth={2} />
+                        {issue.upvoteCount ?? 0}
+                      </span>
+                    </td>
+                    <td>
+                      <Link
+                        to={`/issues/${issue.id}`}
+                        className="inline-flex items-center gap-1 text-body-sm text-civic hover:underline"
+                      >
+                        View <ExternalLink size={11} />
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>

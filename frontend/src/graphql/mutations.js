@@ -83,6 +83,30 @@ export const MARK_NOTIFICATION_READ_MUTATION = gql`
   }
 `;
 
+export const ADD_COMMENT_MUTATION = gql`
+  mutation AddComment($issueId: ID!, $body: String!) {
+    addComment(issueId: $issueId, body: $body) {
+      id
+      body
+      createdAt
+      author {
+        id
+        name
+      }
+    }
+  }
+`;
+
+export const UPVOTE_ISSUE_MUTATION = gql`
+  mutation UpvoteIssue($id: ID!) {
+    upvoteIssue(id: $id) {
+      id
+      upvoteCount
+      upvotedByMe
+    }
+  }
+`;
+
 export const CHAT_MUTATION = gql`
   mutation Chat($message: String!, $history: [ChatHistoryInput!]) {
     chat(message: $message, history: $history) {

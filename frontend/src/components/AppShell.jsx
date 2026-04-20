@@ -1,5 +1,5 @@
 import { NavLink, Link, useNavigate } from 'react-router-dom';
-import { FilePlus, LayoutDashboard, MessageCircle, FileText, LogOut } from 'lucide-react';
+import { FilePlus, LayoutDashboard, MessageCircle, FileText, LogOut, Users, List } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import StatusStrip from './StatusStrip';
 
@@ -30,6 +30,10 @@ export default function AppShell({ children }) {
           <nav className="flex flex-wrap items-center justify-end gap-1">
             {user ? (
               <>
+                <NavLink to="/issues" className={navClass}>
+                  <List size={15} strokeWidth={2} />
+                  Issues
+                </NavLink>
                 <NavLink to="/report" className={navClass}>
                   <FilePlus size={15} strokeWidth={2} />
                   Report
@@ -38,6 +42,12 @@ export default function AppShell({ children }) {
                   <NavLink to="/staff" className={navClass}>
                     <LayoutDashboard size={15} strokeWidth={2} />
                     Dashboard
+                  </NavLink>
+                )}
+                {user.role === 'ADVOCATE' && (
+                  <NavLink to="/advocate" className={navClass}>
+                    <Users size={15} strokeWidth={2} />
+                    Community
                   </NavLink>
                 )}
                 <NavLink to="/chatbot" className={navClass}>

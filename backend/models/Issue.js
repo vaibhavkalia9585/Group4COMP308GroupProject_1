@@ -33,6 +33,7 @@ const issueSchema = new mongoose.Schema(
     aiSummary: { type: String, default: '' },
     aiSuggestedCategory: { type: String, default: '' },
     aiSuggestedPriority: { type: String, default: '' },
+    upvotes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
   },
   { timestamps: true }
 );

@@ -1,4 +1,6 @@
 import { useMutation, useQuery } from '@apollo/client';
+import { Link } from 'react-router-dom';
+import { ThumbsUp, MessageSquare, ExternalLink } from 'lucide-react';
 import { ISSUES_QUERY, MY_NOTIFICATIONS_QUERY } from '../graphql/queries';
 import { MARK_NOTIFICATION_READ_MUTATION } from '../graphql/mutations';
 import PageTitle from '../components/PageTitle';
@@ -58,7 +60,9 @@ export default function MyIssues() {
                   <th>Title</th>
                   <th style={{ width: '9rem' }}>Category</th>
                   <th style={{ width: '9rem' }}>Status</th>
+                  <th style={{ width: '7rem' }}>Upvotes</th>
                   <th style={{ width: '8rem' }}>Last update</th>
+                  <th style={{ width: '5rem' }}></th>
                 </tr>
               </thead>
               <tbody>
@@ -72,7 +76,21 @@ export default function MyIssues() {
                     <td className="font-medium text-text-primary">{issue.title}</td>
                     <td className="text-text-secondary">{issue.category}</td>
                     <td><StatusDot value={issue.status} type="status" /></td>
+                    <td>
+                      <span className="inline-flex items-center gap-1 text-body-sm text-ink-mute">
+                        <ThumbsUp size={12} strokeWidth={2} />
+                        {issue.upvoteCount ?? 0}
+                      </span>
+                    </td>
                     <td className="font-mono text-mono text-text-secondary">{fmtDate(issue.createdAt)}</td>
+                    <td>
+                      <Link
+                        to={`/issues/${issue.id}`}
+                        className="inline-flex items-center gap-1 text-body-sm text-civic hover:underline"
+                      >
+                        View <ExternalLink size={11} />
+                      </Link>
+                    </td>
                   </tr>
                 ))}
               </tbody>
