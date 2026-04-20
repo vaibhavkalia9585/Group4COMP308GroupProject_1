@@ -11,7 +11,7 @@ function fmtDate(ts) {
 }
 
 function shortId(id) {
-  return 'CASE-' + id?.slice(-8).toUpperCase();
+  return `CASE-${id?.slice(-8).toUpperCase()}`;
 }
 
 export default function MyIssues() {
@@ -37,20 +37,20 @@ export default function MyIssues() {
     <div>
       <PageTitle label="Your account" title="My reports" />
 
-      <div className="panel p-6 mb-8">
-        <h2 className="font-semibold text-ink text-display-md mb-4">Reports</h2>
+      <div className="panel mb-8 p-6">
+        <h2 className="mb-4 text-display-md font-semibold text-text-primary">Reports</h2>
 
-        {loading && <p className="text-body text-ink-mute">Loading…</p>}
-        {error && <p className="text-body text-flag">{error.message}</p>}
+        {loading && <p className="text-body text-text-secondary">Loading…</p>}
+        {error && <p className="text-body text-brand-accent">{error.message}</p>}
 
         {!loading && issues.length === 0 && (
-          <p className="text-body text-ink-mute py-6">
-            You haven't submitted any reports yet.
+          <p className="py-6 text-body text-text-secondary">
+            You haven&apos;t submitted any reports yet.
           </p>
         )}
 
         {issues.length > 0 && (
-          <div className="overflow-x-auto">
+          <div className="overflow-x-auto rounded-xl border border-ui-border bg-ui-surface">
             <table className="data-table">
               <thead>
                 <tr>
@@ -65,14 +65,14 @@ export default function MyIssues() {
                 {issues.map((issue) => (
                   <tr key={issue.id}>
                     <td>
-                      <span className="font-mono text-mono text-civic">
+                      <span className="font-mono text-mono text-brand-primary">
                         {shortId(issue.id)}
                       </span>
                     </td>
-                    <td className="font-medium text-ink">{issue.title}</td>
-                    <td className="text-ink-mute">{issue.category}</td>
+                    <td className="font-medium text-text-primary">{issue.title}</td>
+                    <td className="text-text-secondary">{issue.category}</td>
                     <td><StatusDot value={issue.status} type="status" /></td>
-                    <td className="font-mono text-mono text-ink-mute">{fmtDate(issue.createdAt)}</td>
+                    <td className="font-mono text-mono text-text-secondary">{fmtDate(issue.createdAt)}</td>
                   </tr>
                 ))}
               </tbody>
@@ -81,13 +81,12 @@ export default function MyIssues() {
         )}
       </div>
 
-      {/* Notifications */}
       <div className="panel p-6">
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="font-semibold text-ink text-display-md">
+          <h2 className="text-display-md font-semibold text-text-primary">
             Notifications
             {unreadCount > 0 && (
-              <span className="ml-2 inline-flex items-center rounded-full bg-civic px-2 py-0.5 text-[11px] font-semibold text-white">
+              <span className="ml-2 inline-flex items-center rounded-full bg-brand-primary px-2 py-0.5 text-[11px] font-semibold text-white">
                 {unreadCount} new
               </span>
             )}
@@ -95,7 +94,7 @@ export default function MyIssues() {
         </div>
 
         {notifs.length === 0 && (
-          <p className="text-body text-ink-mute py-4">No notifications yet.</p>
+          <p className="py-4 text-body text-text-secondary">No notifications yet.</p>
         )}
 
         <div className="flex flex-col gap-2">
@@ -104,19 +103,18 @@ export default function MyIssues() {
               key={n.id}
               className={`${n.read ? 'notif-read' : 'notif-unread'} flex items-start justify-between gap-4`}
             >
-              <div className="flex-1 min-w-0">
-                <p className={`text-body ${n.read ? 'text-ink-mute' : 'text-ink font-medium'}`}>
+              <div className="min-w-0 flex-1">
+                <p className={`text-body ${n.read ? 'text-text-secondary' : 'font-medium text-text-primary'}`}>
                   {n.message}
                 </p>
-                <p className="font-mono text-mono text-ink-faint mt-1">
+                <p className="mt-1 font-mono text-mono text-gray-400">
                   {n.type} · {fmtDate(n.createdAt)}
                 </p>
               </div>
               {!n.read && (
                 <button
                   onClick={() => handleMarkRead(n.id)}
-                  className="btn-ghost shrink-0"
-                  style={{ padding: '0.375rem 0.875rem', fontSize: '13px' }}
+                  className="btn-ghost shrink-0 px-3 py-1.5 text-[13px]"
                 >
                   Mark read
                 </button>

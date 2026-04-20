@@ -60,103 +60,104 @@ export default function Chatbot() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      {/* Header */}
-      <div className="mb-6 flex items-center gap-3">
-        <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-ink">
-          <Sparkles size={18} strokeWidth={2} className="text-white" />
-        </div>
-        <div>
-          <h1 className="font-semibold text-ink text-display-md leading-tight">CivicBot</h1>
-          <p className="text-body-sm text-ink-mute">
-            Ask about open issues, trends, and safety alerts — powered by Gemini.
-          </p>
-        </div>
-      </div>
-
-      {/* Input */}
-      <form
-        onSubmit={(e) => { e.preventDefault(); send(); }}
-        className="mb-6 flex items-center gap-2"
-      >
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask about open issues, trends, or safety alerts…"
-          className="field-input flex-1"
-          disabled={loading}
-        />
-        <button
-          type="submit"
-          disabled={loading || !input.trim()}
-          className="btn-ink"
-          aria-label="Send"
-        >
-          {loading ? 'Thinking…' : <>Send <ArrowRight size={15} strokeWidth={2} /></>}
-        </button>
-      </form>
-
-      {/* Starter prompts */}
-      {!hasUserMessages && (
-        <div className="mb-6 panel p-5">
-          <p className="text-label uppercase tracking-widest font-medium text-ink-mute mb-3">Try asking</p>
-          <div className="flex flex-wrap gap-2">
-            {STARTERS.map((s) => (
-              <button
-                key={s}
-                onClick={() => send(s)}
-                disabled={loading}
-                className="pill disabled:opacity-40"
-              >
-                {s}
-              </button>
-            ))}
+      <div className="mb-6 overflow-hidden rounded-2xl border border-ui-border bg-ui-surface shadow-sm">
+        <div className="flex items-center gap-3 bg-brand-primary px-5 py-4 text-white">
+          <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/10">
+            <Sparkles size={18} strokeWidth={2} className="text-white" />
+          </div>
+          <div>
+            <h1 className="text-display-md font-semibold leading-tight">CivicBot</h1>
+            <p className="text-body-sm text-blue-100">
+              Ask about open issues, trends, and safety alerts.
+            </p>
           </div>
         </div>
-      )}
+        <div className="p-5">
+          <form
+            onSubmit={(e) => { e.preventDefault(); send(); }}
+            className="mb-6 flex items-center gap-2"
+          >
+            <input
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Ask about open issues, trends, or safety alerts…"
+              className="field-input flex-1"
+              disabled={loading}
+            />
+            <button
+              type="submit"
+              disabled={loading || !input.trim()}
+              className="btn-ink"
+              aria-label="Send"
+            >
+              {loading ? 'Thinking…' : <>Send <ArrowRight size={15} strokeWidth={2} /></>}
+            </button>
+          </form>
 
-      {/* Conversation */}
-      <div className="flex flex-col gap-3">
-        {messages.map((m, idx) => {
-          if (m.role === 'user') {
-            return (
-              <div key={idx} className="flex justify-end">
-                <div className="max-w-[85%] rounded-xl rounded-br-sm bg-ink px-4 py-2.5 text-white text-body">
-                  {m.content}
-                </div>
+          {!hasUserMessages && (
+            <div className="mb-6 rounded-xl bg-gray-50 p-5">
+              <p className="mb-3 font-mono text-label font-medium uppercase tracking-widest text-text-secondary">
+                Try asking
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {STARTERS.map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => send(s)}
+                    disabled={loading}
+                    className="pill disabled:opacity-40"
+                  >
+                    {s}
+                  </button>
+                ))}
               </div>
-            );
-          }
-          if (m.source === 'system') {
-            return (
-              <div key={idx} className="panel p-4">
-                <p className="text-body text-ink-mute">{m.content}</p>
-              </div>
-            );
-          }
-          if (m.source === 'error') {
-            return (
-              <div key={idx} className="rounded-xl border border-flag/30 bg-flag-soft p-4">
-                <p className="text-body text-flag">{m.content}</p>
-              </div>
-            );
-          }
-          return (
-            <div key={idx} className="panel p-4">
-              <p className="text-body text-ink whitespace-pre-wrap">{m.content}</p>
-              {fmtSource(m.source, m.ms) && (
-                <p className="mt-2 font-mono text-mono text-ink-faint">
-                  {fmtSource(m.source, m.ms)}
-                </p>
-              )}
             </div>
-          );
-        })}
-        {loading && (
-          <div className="panel p-4">
-            <p className="text-body text-ink-mute">Thinking…</p>
+          )}
+
+          <div className="flex flex-col gap-3">
+            {messages.map((m, idx) => {
+              if (m.role === 'user') {
+                return (
+                  <div key={idx} className="flex justify-end">
+                    <div className="max-w-[85%] rounded-xl rounded-br-sm bg-brand-primary px-4 py-2.5 text-body text-white">
+                      {m.content}
+                    </div>
+                  </div>
+                );
+              }
+              if (m.source === 'system') {
+                return (
+                  <div key={idx} className="rounded-xl bg-gray-50 p-4">
+                    <p className="text-body text-text-secondary">{m.content}</p>
+                  </div>
+                );
+              }
+              if (m.source === 'error') {
+                return (
+                  <div key={idx} className="rounded-xl border border-brand-accent/20 bg-red-50 p-4">
+                    <p className="text-body text-brand-accent">{m.content}</p>
+                  </div>
+                );
+              }
+              return (
+                <div key={idx} className="rounded-xl border border-ui-border bg-white p-4">
+                  <p className="whitespace-pre-wrap text-body text-text-primary">{m.content}</p>
+                  {fmtSource(m.source, m.ms) && (
+                    <p className="mt-2 font-mono text-mono text-gray-400">
+                      {fmtSource(m.source, m.ms)}
+                    </p>
+                  )}
+                </div>
+              );
+            })}
+            {loading && (
+              <div className="rounded-xl border border-ui-border bg-white p-4">
+                <p className="text-body text-text-secondary">Thinking…</p>
+              </div>
+            )}
+            <div ref={bottomRef} />
           </div>
-        )}
-        <div ref={bottomRef} />
+        </div>
       </div>
     </div>
   );

@@ -28,12 +28,12 @@ export default function Register() {
   return (
     <div className="mx-auto w-full max-w-md py-8">
       <div className="panel p-8">
-        <h1 className="font-semibold text-ink text-display-lg">Create account</h1>
-        <p className="mt-1 text-body text-ink-mute">Join CivicCase to report and track issues.</p>
+        <h1 className="text-display-lg font-semibold text-text-primary">Create account</h1>
+        <p className="mt-1 text-body text-text-secondary">Join CivicCase to report and track issues.</p>
 
         <form onSubmit={onSubmit} className="mt-6 flex flex-col gap-4">
           <label className="flex flex-col gap-1.5">
-            <span className="text-body-sm font-medium text-ink">Full name</span>
+            <span className="text-body-sm font-medium text-text-primary">Full name</span>
             <input
               name="name"
               required
@@ -44,7 +44,7 @@ export default function Register() {
             />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-body-sm font-medium text-ink">Email</span>
+            <span className="text-body-sm font-medium text-text-primary">Email</span>
             <input
               name="email"
               type="email"
@@ -57,7 +57,7 @@ export default function Register() {
             />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-body-sm font-medium text-ink">Password</span>
+            <span className="text-body-sm font-medium text-text-primary">Password</span>
             <input
               name="password"
               type="password"
@@ -71,7 +71,7 @@ export default function Register() {
             />
           </label>
           <label className="flex flex-col gap-1.5">
-            <span className="text-body-sm font-medium text-ink">Role</span>
+            <span className="text-body-sm font-medium text-text-primary">Role</span>
             <select name="role" value={form.role} onChange={onChange} className="field-input">
               <option value="RESIDENT">Resident</option>
               <option value="STAFF">Municipal Staff</option>
@@ -79,17 +79,16 @@ export default function Register() {
             </select>
           </label>
 
-          {error && <p className="text-body-sm text-flag">{error}</p>}
+          {error && <p className="text-body-sm text-brand-accent">{error}</p>}
 
-          <button type="submit" className="btn-ink w-full mt-2" disabled={loading}>
+          <button type="submit" className="btn-ink mt-2 w-full" disabled={loading}>
             {loading ? 'Creating…' : 'Create account'}
           </button>
         </form>
 
-        <hr className="hr-thin mt-6 mb-4" />
-        <p className="text-body-sm text-ink-mute text-center">
-          Already have an account?{' '}
-          <Link to="/login" className="link">Sign in.</Link>
+        <hr className="hr-thin mb-4 mt-6" />
+        <p className="text-center text-body-sm text-text-secondary">
+          Already have an account? <Link to="/login" className="link">Sign in.</Link>
         </p>
       </div>
     </div>

@@ -4,11 +4,11 @@ export default function SparkStat({ title, value, data = [], loading }) {
   const chartData = data.length ? data : Array.from({ length: 7 }, () => ({ v: 0 }));
 
   return (
-    <div className="panel p-4 flex flex-col gap-1">
-      <span className="text-label uppercase tracking-widest font-medium text-ink-mute">
+    <div className="panel flex flex-col gap-1 p-4">
+      <span className="text-label font-medium uppercase tracking-widest text-text-secondary">
         {title}
       </span>
-      <span className="font-semibold text-ink text-display-md leading-none">
+      <span className="text-display-md font-semibold leading-none text-brand-primary">
         {loading ? '—' : value ?? '—'}
       </span>
       <div className="mt-2 h-[32px] w-full">
@@ -17,7 +17,7 @@ export default function SparkStat({ title, value, data = [], loading }) {
             <Line
               type="monotone"
               dataKey="v"
-              stroke="#1A3A5C"
+              stroke="#1E3A8A"
               strokeWidth={1.5}
               dot={false}
             />

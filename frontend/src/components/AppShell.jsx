@@ -17,19 +17,18 @@ export default function AppShell({ children }) {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-paper">
-      {/* Top nav */}
-      <header className="border-b border-rule bg-white">
+    <div className="flex min-h-screen flex-col bg-ui-bg text-text-primary">
+      <header className="border-b border-ui-border bg-brand-primary">
         <div className="mx-auto flex max-w-content items-center justify-between gap-6 px-6 py-3">
-          <Link to="/" className="flex items-center gap-2.5 shrink-0">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-ink text-paper text-[14px] font-bold">
+          <Link to="/" className="shrink-0 flex items-center gap-2.5">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/20 bg-white text-[14px] font-bold text-brand-primary">
               C
             </span>
-            <span className="font-semibold text-ink text-[15px]">CivicCase</span>
+            <span className="text-[15px] font-semibold text-white">CivicCase</span>
           </Link>
 
-          <nav className="flex items-center gap-1 flex-wrap justify-end">
-            {user && (
+          <nav className="flex flex-wrap items-center justify-end gap-1">
+            {user ? (
               <>
                 <NavLink to="/report" className={navClass}>
                   <FilePlus size={15} strokeWidth={2} />
@@ -49,39 +48,42 @@ export default function AppShell({ children }) {
                   <FileText size={15} strokeWidth={2} />
                   My reports
                 </NavLink>
-                <div className="mx-2 h-5 w-px bg-rule" />
-                <span className="text-body-sm text-ink-mute px-2">{user.name}</span>
+                <div className="mx-2 h-5 w-px bg-white/20" />
+                <span className="px-2 text-body-sm text-blue-100">{user.name}</span>
                 <button onClick={handleLogout} className="nav-link" title="Sign out">
                   <LogOut size={15} strokeWidth={2} />
                 </button>
               </>
-            )}
-            {!user && (
+            ) : (
               <>
-                <NavLink to="/login" className={navClass}>Sign in</NavLink>
-                <Link to="/register" className="btn-ink ml-2">Create account</Link>
+                <NavLink to="/login" className={navClass}>
+                  Sign in
+                </NavLink>
+                <Link
+                  to="/register"
+                  className="btn-ghost ml-2 border-white/20 bg-white text-brand-primary hover:border-white/30 hover:bg-blue-50"
+                >
+                  Create account
+                </Link>
               </>
             )}
           </nav>
         </div>
       </header>
 
-      {/* Status strip — only when logged in */}
       {user && <StatusStrip />}
 
-      {/* Page content */}
       <main className="mx-auto w-full max-w-content flex-1 px-6 py-10">
         {children}
       </main>
 
-      {/* Footer */}
-      <footer className="border-t border-rule bg-white">
+      <footer className="border-t border-ui-border bg-ui-surface">
         <div className="mx-auto max-w-content px-6 py-5">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <p className="font-mono text-mono text-ink-faint">
+            <p className="font-mono text-mono text-text-secondary">
               CivicCase · COMP308 Group 4 · {new Date().getFullYear()}
             </p>
-            <div className="flex gap-6 text-body-sm text-ink-mute">
+            <div className="flex gap-6 text-body-sm text-text-secondary">
               <span>WCAG 2.1 AA</span>
               <span>cityservices@example.ca</span>
             </div>
