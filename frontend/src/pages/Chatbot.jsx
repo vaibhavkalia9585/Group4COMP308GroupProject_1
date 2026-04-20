@@ -119,7 +119,7 @@ export default function Chatbot() {
               if (m.role === 'user') {
                 return (
                   <div key={idx} className="flex justify-end">
-                    <div className="max-w-[85%] rounded-xl rounded-br-sm bg-brand-primary px-4 py-2.5 text-body text-white">
+                    <div className="max-w-[85%] rounded-xl rounded-br-sm bg-brand-primary px-4 py-2.5 text-body text-white break-words">
                       {m.content}
                     </div>
                   </div>
@@ -141,7 +141,7 @@ export default function Chatbot() {
               }
               return (
                 <div key={idx} className="rounded-xl border border-ui-border bg-white p-4">
-                  <p className="whitespace-pre-wrap text-body text-text-primary">{m.content}</p>
+                  <p className="whitespace-pre-wrap break-words text-body text-text-primary">{m.content}</p>
                   {fmtSource(m.source, m.ms) && (
                     <p className="mt-2 font-mono text-mono text-gray-400">
                       {fmtSource(m.source, m.ms)}

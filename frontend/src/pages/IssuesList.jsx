@@ -34,28 +34,56 @@ export default function IssuesList() {
         Browse every reported issue. Click an issue to view details, leave a comment, or upvote it.
       </PageTitle>
 
-      {/* Filters */}
-      <div className="panel p-4 mb-6 flex flex-wrap items-center gap-4">
-        <div className="flex flex-wrap gap-1.5">
-          {STATUSES.map((s) => {
-            const label = s === '' ? 'All statuses' : s === 'IN_PROGRESS' ? 'In progress' : s.charAt(0) + s.slice(1).toLowerCase();
-            return (
-              <button key={s} onClick={() => setStatusFilter(s)} className={`pill ${statusFilter === s ? 'pill-active' : ''}`}>
-                {label}
-              </button>
-            );
-          })}
+      {/* Filters — pills on desktop, selects on mobile */}
+      <div className="panel p-4 mb-6">
+        {/* Mobile: dropdowns */}
+        <div className="flex gap-3 sm:hidden">
+          <select
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+            className="field-input flex-1"
+          >
+            {STATUSES.map((s) => (
+              <option key={s} value={s}>
+                {s === '' ? 'All statuses' : s === 'IN_PROGRESS' ? 'In progress' : s.charAt(0) + s.slice(1).toLowerCase()}
+              </option>
+            ))}
+          </select>
+          <select
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+            className="field-input flex-1"
+          >
+            {CATEGORIES.map((c) => (
+              <option key={c} value={c}>
+                {c === '' ? 'All categories' : c.charAt(0) + c.slice(1).toLowerCase()}
+              </option>
+            ))}
+          </select>
         </div>
-        <div className="h-4 w-px bg-rule hidden sm:block" />
-        <div className="flex flex-wrap gap-1.5">
-          {CATEGORIES.map((c) => {
-            const label = c === '' ? 'All categories' : c.charAt(0) + c.slice(1).toLowerCase();
-            return (
-              <button key={c} onClick={() => setCategoryFilter(c)} className={`pill ${categoryFilter === c ? 'pill-active' : ''}`}>
-                {label}
-              </button>
-            );
-          })}
+        {/* Desktop: pills */}
+        <div className="hidden sm:flex flex-wrap items-center gap-4">
+          <div className="flex flex-wrap gap-1.5">
+            {STATUSES.map((s) => {
+              const label = s === '' ? 'All statuses' : s === 'IN_PROGRESS' ? 'In progress' : s.charAt(0) + s.slice(1).toLowerCase();
+              return (
+                <button key={s} onClick={() => setStatusFilter(s)} className={`pill ${statusFilter === s ? 'pill-active' : ''}`}>
+                  {label}
+                </button>
+              );
+            })}
+          </div>
+          <div className="h-4 w-px bg-rule" />
+          <div className="flex flex-wrap gap-1.5">
+            {CATEGORIES.map((c) => {
+              const label = c === '' ? 'All categories' : c.charAt(0) + c.slice(1).toLowerCase();
+              return (
+                <button key={c} onClick={() => setCategoryFilter(c)} className={`pill ${categoryFilter === c ? 'pill-active' : ''}`}>
+                  {label}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 

@@ -28,7 +28,7 @@ export default function AdvocateDashboard() {
       </PageTitle>
 
       {/* Summary cards */}
-      <div className="grid grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 gap-4 mb-6 sm:grid-cols-3">
         <div className="panel p-4 text-center">
           <p className="text-display-md font-semibold text-ink">{issues.length}</p>
           <p className="text-body-sm text-ink-mute mt-0.5">Open issues</p>

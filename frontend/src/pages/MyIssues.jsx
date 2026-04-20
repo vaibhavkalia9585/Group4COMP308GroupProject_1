@@ -56,33 +56,33 @@ export default function MyIssues() {
             <table className="data-table">
               <thead>
                 <tr>
-                  <th style={{ width: '11rem' }}>Ref</th>
+                  <th className="hidden sm:table-cell" style={{ width: '11rem' }}>Ref</th>
                   <th>Title</th>
-                  <th style={{ width: '9rem' }}>Category</th>
+                  <th className="hidden sm:table-cell" style={{ width: '9rem' }}>Category</th>
                   <th style={{ width: '9rem' }}>Status</th>
-                  <th style={{ width: '7rem' }}>Upvotes</th>
-                  <th style={{ width: '8rem' }}>Last update</th>
+                  <th className="hidden md:table-cell" style={{ width: '7rem' }}>Upvotes</th>
+                  <th className="hidden md:table-cell" style={{ width: '8rem' }}>Last update</th>
                   <th style={{ width: '5rem' }}></th>
                 </tr>
               </thead>
               <tbody>
                 {issues.map((issue) => (
                   <tr key={issue.id}>
-                    <td>
+                    <td className="hidden sm:table-cell">
                       <span className="font-mono text-mono text-brand-primary">
                         {shortId(issue.id)}
                       </span>
                     </td>
-                    <td className="font-medium text-text-primary">{issue.title}</td>
-                    <td className="text-text-secondary">{issue.category}</td>
+                    <td className="font-medium text-text-primary max-w-[8rem] sm:max-w-none truncate">{issue.title}</td>
+                    <td className="hidden sm:table-cell text-text-secondary">{issue.category}</td>
                     <td><StatusDot value={issue.status} type="status" /></td>
-                    <td>
+                    <td className="hidden md:table-cell">
                       <span className="inline-flex items-center gap-1 text-body-sm text-ink-mute">
                         <ThumbsUp size={12} strokeWidth={2} />
                         {issue.upvoteCount ?? 0}
                       </span>
                     </td>
-                    <td className="font-mono text-mono text-text-secondary">{fmtDate(issue.createdAt)}</td>
+                    <td className="hidden md:table-cell font-mono text-mono text-text-secondary">{fmtDate(issue.createdAt)}</td>
                     <td>
                       <Link
                         to={`/issues/${issue.id}`}
